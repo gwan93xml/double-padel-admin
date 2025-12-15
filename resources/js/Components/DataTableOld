@@ -1,0 +1,462 @@
+// "use client"
+
+// import React from "react"
+// import { useState, useEffect, useRef, useCallback } from "react"
+// import { Button } from "@/Components/ui/button"
+// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table"
+// import { Input } from "@/Components/ui/input"
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
+// import { ArrowDown, ArrowUp, ArrowUpDown, Download, ExternalLink, MoreVertical, Plus, Loader2, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Trash, Trash2 } from "lucide-react"
+// import axios from "axios"
+// import moment from "moment"
+// import { PromiseAlertDialog, showAlertDialog } from "./ui/promise-alert-dialog"
+// import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog"
+// import { toast } from "@/hooks/use-toast"
+
+// type ColumnDef = {
+//     accessorKey: string
+//     header: string
+//     className?: string
+//     cell: (info: any) => React.ReactNode
+// }
+
+// type DataTableProps = {
+//     columns: ColumnDef[]
+//     apiUrl: string
+//     dummyData?: any[]
+//     refreshTrigger?: number
+//     onCreate?: () => void
+//     onEdit?: (id: string) => void
+//     onDelete?: (id: string) => void
+//     onPrint?: (id: string) => void
+//     onExport?: () => void
+//     printUrl?: string
+//     onPrintDelivery?: (id: string) => void
+//     isFilterDate?: boolean
+//     canForceDelete?: boolean
+// }
+
+// export default function DataTable({
+//     columns,
+//     apiUrl,
+//     printUrl,
+//     refreshTrigger,
+//     onCreate,
+//     onEdit,
+//     onDelete,
+//     onExport,
+//     onPrint,
+//     onPrintDelivery,
+//     isFilterDate,
+//     canForceDelete = false,
+// }: DataTableProps) {
+//     const [data, setData] = useState<any[]>([])
+//     const [loading, setLoading] = useState(false)
+//     const [loadingMore, setLoadingMore] = useState(false)
+//     const [error, setError] = useState<string | null>(null)
+//     const [selectedItems, setSelectedItems] = useState<string[]>([])
+//     const [sortColumn, setSortColumn] = useState<string | null>(null)
+//     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+//     const [searchTerm, setSearchTerm] = useState("")
+//     const [hasMore, setHasMore] = useState(true)
+//     const [currentPage, setCurrentPage] = useState(1)
+//     const [totalRecords, setTotalRecords] = useState(0)
+
+//     const [printModalShow, setPrintModalShow] = useState(false)
+//     const [printModalUrl, setPrintModalUrl] = useState("")
+
+//     const [startDate, setStartDate] = useState(null)
+//     const [endDate, setEndDate] = useState(null)
+
+//     const observer = useRef<IntersectionObserver>()
+//     const lastElementRef = useCallback(
+//         (node: HTMLTableRowElement) => {
+//             if (loading || loadingMore) return
+//             if (observer.current) observer.current.disconnect()
+//             observer.current = new IntersectionObserver((entries) => {
+//                 if (entries[0].isIntersecting && hasMore) {
+//                     loadMoreData()
+//                 }
+//             })
+//             if (node) observer.current.observe(node)
+//         },
+//         [loading, loadingMore, hasMore],
+//     )
+
+//     // Reset data when filters change
+//     useEffect(() => {
+//         setData([])
+//         setCurrentPage(1)
+//         setHasMore(true)
+//         fetchData(true)
+//     }, [apiUrl, sortColumn, sortOrder, searchTerm, refreshTrigger, startDate, endDate])
+
+//     const fetchData = async (reset = false) => {
+//         console.log(reset)
+//         if (reset) {
+//             setLoading(true)
+//         } else {
+//             setLoadingMore(true)
+//         }
+//         setError(null)
+
+//         try {
+//             const page = reset ? 1 : currentPage
+//             const queryParams = new URLSearchParams({
+//                 take: "50",
+//                 page: page.toString(),
+//                 sort: sortColumn || "",
+//                 order: sortOrder,
+//                 search: searchTerm,
+//                 start_date: isFilterDate ? (startDate ? moment(startDate).format("YYYY-MM-DD") : "") : "",
+//                 end_date: isFilterDate ? (endDate ? moment(endDate).format("YYYY-MM-DD") : "") : "",
+//             })
+
+//             const { data: response } = await axios.get(`${apiUrl}?${queryParams}`)
+
+//             if (reset) {
+//                 setData(response.data)
+//             } else {
+//                 setData((prevData) => [...prevData, ...response.data])
+//             }
+
+//             setTotalRecords(response.total)
+//             setHasMore(response.current_page < response.last_page)
+
+//             if (!reset) {
+//                 setCurrentPage((prev) => prev + 1)
+//             } else {
+//                 setCurrentPage(2)
+//             }
+//         } catch (err) {
+//             setError("An error occurred while fetching data")
+//         } finally {
+//             setLoading(false)
+//             setLoadingMore(false)
+//         }
+//     }
+
+//     const loadMoreData = () => {
+//         if (!loadingMore && hasMore) {
+//             fetchData(false)
+//         }
+//     }
+
+//     const handleSort = (column: string) => {
+//         if (sortColumn === column) {
+//             setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+//         } else {
+//             setSortColumn(column)
+//             setSortOrder("asc")
+//         }
+//     }
+
+//     const toggleSelectAll = () => {
+//         if (selectedItems.length === data.length) {
+//             setSelectedItems([])
+//         } else {
+//             setSelectedItems(data.map((item) => item.id))
+//         }
+//     }
+
+//     const toggleSelectItem = (id: string) => {
+//         setSelectedItems((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]))
+//     }
+
+//     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         setSearchTerm(e.target.value)
+//     }
+
+//     const getSortIcon = (columnKey: string) => {
+//         if (sortColumn !== columnKey) {
+//             return <ArrowUpDown className="ml-2 h-4 w-4" />
+//         }
+//         if (sortOrder === "asc") {
+//             return <ArrowUp className="ml-2 h-4 w-4" />
+//         }
+//         if (sortOrder === "desc") {
+//             return <ArrowDown className="ml-2 h-4 w-4" />
+//         }
+//         return <ArrowUpDown className="ml-2 h-4 w-4" />
+//     }
+
+//     const printModalClose = () => {
+//         setPrintModalShow(false)
+//     }
+
+//     function handleForceDelete(id: string) {
+//         showAlertDialog({
+//             title: "Apakah Anda yakin?",
+//             description: "Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data Anda secara permanen.",
+//             cancelText: "Batal",
+//             confirmText: "Ya, Hapus data",
+//         }).then(async (result) => {
+//             if (result) {
+//                 try {
+//                     await axios.delete(`/admin/sale/${id}/force-delete`)
+//                     setData((prevData) => prevData.filter((item) => item.id !== id))
+//                     toast({
+//                         title: "Data berhasil dihapus",
+//                         description: "Data telah dihapus secara permanen.",
+//                     })
+//                 } catch (error) {
+//                     setError("An error occurred while deleting the data")
+//                 }
+//             }
+//         })
+//     }
+
+//     if (error) return <div className="text-center py-4 text-red-500">{error}</div>
+
+//     return (
+//         <>
+//             <div className="w-full space-y-4 p-4">
+//                 <div className="flex justify-between items-center">
+//                     <div className="flex-1">
+//                         {isFilterDate && (
+//                             <div className="flex">
+//                                 <div className="w-[300px]">
+//                                     <div className="space-y-2">
+//                                         <label className="text-sm font-medium">Dari</label>
+//                                         <Input
+//                                             type="date"
+//                                             placeholder="Dari Tanggal"
+//                                             className="max-w-sm mr-2"
+//                                             value={startDate ?? ""}
+//                                             onChange={(e: any) => {
+//                                                 setStartDate(e.target.value)
+//                                             }}
+//                                         />
+//                                     </div>
+//                                 </div>
+//                                 <div className="w-[300px]">
+//                                     <div className="space-y-2">
+//                                         <label className="text-sm font-medium">Sampai</label>
+//                                         <Input
+//                                             type="date"
+//                                             placeholder="Sampai Tanggal"
+//                                             className="max-w-sm"
+//                                             value={endDate ?? ""}
+//                                             onChange={(e: any) => {
+//                                                 setEndDate(e.target.value)
+//                                             }}
+//                                         />
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         )}
+//                         <Input placeholder="Search..." value={searchTerm} onChange={handleSearch} className="max-w-sm" />
+//                     </div>
+
+//                     <div className="flex gap-x-2">
+//                         {onExport && (
+//                             <Button variant="outline" size="sm" onClick={onExport}>
+//                                 <Download className="mr-2 h-4 w-4" />
+//                                 Export
+//                             </Button>
+//                         )}
+//                         {onCreate && (
+//                             <Button onClick={onCreate}>
+//                                 <Plus className=" h-4 w-4" />
+//                                 <span>Tambah Data Baru</span>
+//                             </Button>
+//                         )}
+//                     </div>
+//                 </div>
+
+//                 <div className="rounded-md border flex-1 overflow-auto">
+//                     <div className="overflow-x-auto">
+//                         <Table>
+//                             <TableHeader>
+//                                 <TableRow>
+//                                     <TableHead className="w-[10%] text-left">AKSI</TableHead>
+//                                     {columns.map((column) => (
+//                                         <TableHead key={column.accessorKey} className={column.className}>
+//                                             <Button
+//                                                 variant="ghost"
+//                                                 onClick={() => handleSort(column.accessorKey)}
+//                                                 className={`w-full justify-between ${sortColumn === column.accessorKey ? "font-bold bg-gray-100" : ""}`}
+//                                             >
+//                                                 {column.header}
+//                                                 {getSortIcon(column.accessorKey)}
+//                                             </Button>
+//                                         </TableHead>
+//                                     ))}
+//                                     <TableHead>ENTRY BY</TableHead>
+//                                     <TableHead>ENTRY AT</TableHead>
+//                                     <TableHead>LAST EDIT BY</TableHead>
+//                                     <TableHead>LAST EDIT AT</TableHead>
+//                                 </TableRow>
+//                             </TableHeader>
+//                             <TableBody>
+//                                 {loading && data.length === 0 ? (
+//                                     <TableRow>
+//                                         <TableCell colSpan={columns.length + 5} className="text-center py-8">
+//                                             <div className="flex items-center justify-center">
+//                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+//                                                 Loading...
+//                                             </div>
+//                                         </TableCell>
+//                                     </TableRow>
+//                                 ) : (
+//                                     data.map((row, index) => (
+//                                         <TableRow
+//                                             key={row.id}
+//                                             ref={index === data.length - 1 ? lastElementRef : null}
+//                                             className={row.deleted_at ? "bg-red-300" : ""}
+//                                             onDoubleClick={() => {
+//                                                 onEdit!(row.id)
+//                                             }}
+//                                         >
+//                                             <TableCell className="flex justify-start">
+//                                                 {row.deleted_at == null && (
+//                                                     <DropdownMenu>
+//                                                         <DropdownMenuTrigger asChild>
+//                                                             <Button variant="ghost" size="sm">
+//                                                                 <MoreVertical className="h-4 w-4" />
+//                                                             </Button>
+//                                                         </DropdownMenuTrigger>
+//                                                         <DropdownMenuContent align="end">
+//                                                             <DropdownMenuItem onClick={() => onEdit!(row.id)} className="flex justify-between">
+//                                                                 <div>Edit</div>
+//                                                                 <a
+//                                                                     className="ml-2 hover:text-blue-500"
+//                                                                     target="_blank"
+//                                                                     onClick={(e) => e.stopPropagation()}
+//                                                                     href={`${printUrl}/${row.id}/edit`}
+//                                                                     rel="noreferrer"
+//                                                                 >
+//                                                                     <ExternalLink className="h-4 w-4" />
+//                                                                 </a>
+//                                                             </DropdownMenuItem>
+//                                                             {onPrint && (
+//                                                                 <DropdownMenuItem
+//                                                                     onClick={() => {
+//                                                                         setPrintModalUrl(`${printUrl}/${row.id}/print`)
+//                                                                         setPrintModalShow(true)
+//                                                                     }}
+//                                                                 >
+//                                                                     Print
+//                                                                 </DropdownMenuItem>
+//                                                             )}
+//                                                             {onPrintDelivery && (
+//                                                                 <DropdownMenuItem
+//                                                                     onClick={() => {
+//                                                                         setPrintModalUrl(`${printUrl}/${row.id}/print-delivery`)
+//                                                                         setPrintModalShow(true)
+//                                                                     }}
+//                                                                 >
+//                                                                     Print Surat Pengantar
+//                                                                 </DropdownMenuItem>
+//                                                             )}
+//                                                             {onDelete && (
+//                                                                 <DropdownMenuItem
+//                                                                     onClick={async () => {
+//                                                                         const result = await showAlertDialog({
+//                                                                             title: "Apakah Anda yakin?",
+//                                                                             description: "Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data Anda secara permanen.",
+//                                                                             cancelText: "Batal",
+//                                                                             confirmText: "Ya, Hapus data",
+//                                                                         })
+//                                                                         if (result) {
+//                                                                             onDelete(row.id)
+//                                                                         }
+//                                                                     }}
+//                                                                 >
+//                                                                     Delete
+//                                                                 </DropdownMenuItem>
+//                                                             )}
+//                                                         </DropdownMenuContent>
+//                                                     </DropdownMenu>
+//                                                 )}
+//                                                 {row.deleted_at && canForceDelete && (
+//                                                     <Button
+//                                                         variant="destructive"
+//                                                         size="sm"
+//                                                         onClick={() => handleForceDelete(row.id)}
+//                                                         className="ml-2"
+//                                                     >
+//                                                         <Trash2 className="h-4 w-4" />
+//                                                     </Button>
+//                                                 )}
+//                                             </TableCell>
+
+//                                             {columns.map((column) => (
+//                                                 <TableCell key={column.accessorKey}>{column.cell(row)}</TableCell>
+//                                             ))}
+//                                             <TableCell>
+//                                                 <div className="w-[150px]">{row.entry_by}</div>
+//                                             </TableCell>
+//                                             <TableCell>
+//                                                 <div className="w-[150px]">
+//                                                     {row.entry_at ? moment(row.entry_at).format("DD/MM/YYYY HH:mm:ss") : "-"}
+//                                                 </div>
+//                                             </TableCell>
+//                                             <TableCell>
+//                                                 <div className="w-[150px]">{row.last_edit_by}</div>
+//                                             </TableCell>
+//                                             <TableCell>
+//                                                 <div className="w-[150px]">
+//                                                     {row.last_edit_at ? moment(row.last_edit_at).format("DD/MM/YYYY HH:mm:ss") : "-"}
+//                                                 </div>
+//                                             </TableCell>
+//                                         </TableRow>
+//                                     ))
+//                                 )}
+//                             </TableBody>
+//                         </Table>
+//                     </div>
+//                 </div>
+
+//                 {/* Loading more indicator */}
+//                 {loadingMore && (
+//                     <div className="flex items-center justify-center py-4">
+//                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+//                         Loading more data...
+//                     </div>
+//                 )}
+
+//                 {/* End of data indicator */}
+//                 {!hasMore && data.length > 0 && (
+//                     <div className="text-center py-4 text-muted-foreground">
+//                         Total records: {totalRecords}
+//                     </div>
+//                 )}
+
+//                 {/* No data indicator */}
+//                 {!loading && data.length === 0 && <div className="text-center py-8 text-muted-foreground">No data found</div>}
+//             </div>
+
+//             {/* Custom Print Modal - You'll need to implement this component */}
+//             {printModalShow && (
+//                 <Dialog
+//                     open={printModalShow}
+//                     onOpenChange={printModalClose}
+//                     modal
+//                 >
+
+//                     <DialogContent className="max-w-7xl max-h-[90vh] overflow-auto">
+//                         <DialogHeader>
+//                             <DialogTitle>
+//                                 Print Preview
+//                             </DialogTitle>
+//                         </DialogHeader>
+//                         <iframe src={printModalUrl} className="w-full h-[90vh] border" title="Print Preview" />
+//                     </DialogContent>
+//                 </Dialog>
+//                 // <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+//                 //     <div className="bg-white p-4 rounded-lg max-h-[90vh] overflow-auto">
+//                 //         <div className="flex justify-between items-center mb-4">
+//                 //             <h2 className="text-lg font-semibold">Print Preview</h2>
+//                 //             <Button onClick={printModalClose} variant="outline" size="sm">
+//                 //                 Close
+//                 //             </Button>
+//                 //         </div>
+//                 //     </div>
+//                 // </div>
+//             )}
+//             <PromiseAlertDialog />
+
+//         </>
+//     )
+// }
