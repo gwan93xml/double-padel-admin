@@ -11,7 +11,7 @@ class ListController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $itemCategories = Action::query()
+        $actions = Action::query()
             ->when($request->search, function ($query, $keyword) {
                 $query->where(function ($query) use ($keyword) {
                     $query->where('name', 'like', "%$keyword%");
@@ -21,6 +21,6 @@ class ListController extends Controller
                 $query->orderBy($request->sort, $request->order);
             })
             ->paginate($request->take);
-        return new JsonResource($itemCategories);
+        return new JsonResource($actions);
     }
 }

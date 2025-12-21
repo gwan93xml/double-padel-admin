@@ -93,7 +93,7 @@ export function NavUser({
                                     preserveScroll: true,
                                     preserveState: true,
                                     onSuccess: () => {
-                                        router.visit("/admin")
+                                        router.visit("/")
                                     },
                                 })
                             }}

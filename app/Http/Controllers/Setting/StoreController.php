@@ -15,43 +15,37 @@ class StoreController extends Controller
     public function __invoke(Request $request)
     {
         $request->validate([
-            'app_name' => 'required',
-            'code' => 'required',
-            'company_name' => 'required',
-            'company_address' => 'required',
-            'company_phone' => 'required',
-            'vat_paid_to_vendor_chart_of_account_id' => 'required',
-            'sales_tax_payable_chart_of_account_id' => 'required',
-            'sales_chart_of_account_id' => 'required',
-            'purchase_chart_of_account_id' => 'required',
-            'receivable_chart_of_account_id' => 'required',
-            'debt_chart_of_account_id' => 'required',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'app_name' => 'required|string',
+            'app_title' => 'required|string',
+            'company_name' => 'required|string',
+            'address' => 'nullable|string',
+            'logo' => 'nullable|string',
+            'favicon' => 'nullable|string',
         ], [
             'app_name.required' => 'Kolom nama aplikasi harus diisi',
-            'code.required' => 'Kolom kode harus diisi',
+            'app_title.required' => 'Kolom judul aplikasi harus diisi',
             'company_name.required' => 'Kolom nama perusahaan harus diisi',
-            'company_address.required' => 'Kolom alamat perusahaan harus diisi',
-            'company_phone.required' => 'Kolom telepon perusahaan harus diisi',
-            'vat_paid_to_vendor_chart_of_account_id.required' => 'Kolom akun pembayaran PPN ke vendor harus diisi',
-            'sales_tax_payable_chart_of_account_id.required' => 'Kolom akun pajak penjualan yang harus dibayar harus diisi',
-            'sales_chart_of_account_id.required' => 'Kolom akun penjualan harus diisi',
-            'purchase_chart_of_account_id.required' => 'Kolom akun pembelian harus diisi',
-            'receivable_chart_of_account_id.required' => 'Kolom akun piutang harus diisi',
-            'debt_chart_of_account_id.required' => 'Kolom akun hutang harus diisi',
         ]);
         DB::beginTransaction();
         try {
             $setting = Setting::first();
             if ($setting) {
                 $setting->update([
-                    ...$request->all(),
-                    'logo' => $request->hasFile('logo') ? $request->file('logo')->store('logo', 'public') : $setting->logo,
+                    'app_name' => $request->app_name,
+                    'app_title' => $request->app_title,
+                    'company_name' => $request->company_name,
+                    'address' => $request->address,
+                    'logo' => $request->logo ?? $setting->logo,
+                    'favicon' => $request->favicon ?? $setting->favicon,
                 ]);
             } else {
                 Setting::create([
-                    ...$request->all(),
-                    'logo' => $request->hasFile('logo') ? $request->file('logo')->store('logo', 'public') : null,
+                    'app_name' => $request->app_name,
+                    'app_title' => $request->app_title,
+                    'company_name' => $request->company_name,
+                    'address' => $request->address,
+                    'logo' => $request->logo,
+                    'favicon' => $request->favicon,
                 ]);
             }
             DB::commit();

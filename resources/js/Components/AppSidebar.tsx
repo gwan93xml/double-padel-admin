@@ -20,8 +20,10 @@ import {
     ChevronRight,
     DatabaseIcon,
     GaugeIcon,
+    NewspaperIcon,
     ShieldIcon,
     ShoppingCartIcon,
+    Star,
 } from "lucide-react";
 import {
     Collapsible,
@@ -40,7 +42,7 @@ const navList = [
         name: "Master File",
         icon: <DatabaseIcon />,
         link: "#",
-        permission: ['read-member', 'read-bank-account', 'read-company', 'read-division', 'read-warehouse', 'read-customer', 'read-vendor', 'read-item-category', 'read-item', 'read-type-of-tax', 'read-unit'],
+        permission: ['read-member', 'read-venue', 'read-court', 'read-court-schedule', 'read-payment-method'],
         children: [
             {
                 name: "Member",
@@ -48,64 +50,68 @@ const navList = [
                 permission: 'read-member',
             },
             {
-                name: "Rekening Bank",
-                link: "/admin/bank-account",
-                permission: 'read-bank-account',
-            },
-
-            {
-                name: "Perusahaan",
-                link: "/admin/company",
-                permission: 'read-company',
-            },
-
-            {
-                name: "Divisi",
-                link: "/admin/division",
-                permission: 'read-division',
+                name: "Venue",
+                link: "/venue",
+                permission: 'read-venue',
             },
             {
-                name: "Gudang",
-                link: "/admin/warehouse",
-                permission: 'read-warehouse',
+                name: "Lapangan",
+                link: "/court",
+                permission: 'read-court',
             },
             {
-                name: "Pelanggan",
-                link: "/admin/customer",
-                permission: 'read-customer',
+                name: "Jadwal Lapangan",
+                link: "/court-schedule",
+                permission: 'read-court-schedule',
             },
             {
-                name: "Vendor",
-                link: "/admin/vendor",
-                permission: 'read-vendor',
-
-            },
-            {
-                name: "Satuan",
-                link: "/admin/unit",
-                permission: 'read-unit',
-            },
-            {
-                name: "Kategori Item",
-                link: "/admin/item-category",
-                permission: 'read-item-category',
-            },
-            {
-                name: "Item",
-                link: "/admin/item",
-                permission: 'read-item',
-            },
-            {
-                name: "Item Non Stok",
-                link: "/admin/item-non-stock",
-                permission: 'read-item-non-stock',
-            },
-            {
-                name: "Jenis Pajak",
-                link: "/admin/type-of-tax",
-                permission: 'read-type-of-tax',
+                name: "Metode Pembayaran",
+                link: "/payment-method",
+                permission: 'read-payment-method',
             },
         ]
+    },
+    {
+        name: "Transaksi",
+        icon: <ShoppingCartIcon />,
+        link: "#",
+        permission: ['read-booking', 'read-venue', 'read-court', 'read-court-schedule', 'read-payment-method'],
+        children: [
+            {
+                name: "Booking",
+                link: "/booking",
+                permission: 'read-booking',
+            },
+        ]
+    },
+    {
+        name: "CMS",
+        icon: <NewspaperIcon />,
+        link: "#",
+        permission: ['read-blog-category', 'read-blog', 'read-testimony'],
+        children: [
+            {
+                name: "Kategori Blog",
+                link: "/blog-category",
+                permission: 'read-blog-category',
+            },
+            {
+                name: "Blog",
+                link: "/blog",
+                permission: 'read-blog',
+            },
+            {
+                name: "Testimoni",
+                link: "/testimony",
+                permission: 'read-testimony',
+            }
+        ]
+    },
+    {
+        name: "Review",
+        icon: <Star />,
+        link: "/review",
+        permission: ['read-review']
     },
     {
         name: "Pengaturan",
@@ -159,16 +165,16 @@ export function AppSidebar() {
                             size="lg"
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-[100px]"
                         >
-                            <div >
+                            <div className="p-12 bg-black dark:bg-transparent rounded-lg">
                                 <img
-                                    src={`/storage/${setting.logo}`}
-                                    className="items-center justify-center h-[80px]" />
+                                    src={`/assets/images/logo.png`}
+                                    className="rounded" />
                             </div>
 
-                            <div className="flex flex-col gap-0.5 leading-none">
-                                <span className="font-semibold">{setting.app_name}</span>
+                            {/* <div className="flex flex-col gap-0.5 leading-none">
+                                <span className="font-semibold">Double Padel</span>
                                 <span className="">v1.0.0</span>
-                            </div>
+                            </div> */}
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

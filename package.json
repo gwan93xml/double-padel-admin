@@ -27,6 +27,8 @@
         "vite": "^5.4.11"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^44.3.0",
+        "@ckeditor/ckeditor5-react": "^11.0.1",
         "@radix-ui/react-alert-dialog": "^1.1.6",
         "@radix-ui/react-avatar": "^1.1.1",
         "@radix-ui/react-checkbox": "^1.1.2",
@@ -61,7 +63,7 @@
         "react-day-picker": "8.10.1",
         "react-dropzone": "^14.3.5",
         "react-hook-form": "^7.53.2",
-        "recharts": "^2.15.3",
+        "recharts": "^2.15.4",
         "tailwind-merge": "^2.5.4",
         "tailwindcss-animate": "^1.0.7"
     }

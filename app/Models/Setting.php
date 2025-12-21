@@ -9,6 +9,10 @@ class Setting extends Model
     protected $fillable = [
         'app_name',
         'logo',
+        'app_title',
+        'company_name',
+        'favicon',
+        'address',
     ];
 
 }

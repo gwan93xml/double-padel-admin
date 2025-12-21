@@ -37,8 +37,8 @@ export default function Login({
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <FormGroup label='Username/Email' error={errors.email}>
+            <form onSubmit={submit} >
+                <FormGroup label='Email' error={errors.email}>
                     <Input
                         id="email"
                         type="text"
@@ -60,7 +60,6 @@ export default function Login({
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
-
                 </FormGroup>
 
                

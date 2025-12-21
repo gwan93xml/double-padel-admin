@@ -98,6 +98,7 @@ type DataTableProps = {
     canDelete?: boolean
     transactionType?: string
     additionalActionButtons?: (row: any) => React.ReactNode
+    additionalTools?: React.ReactNode
 }
 
 export default function EnhancedDataTable({
@@ -124,6 +125,7 @@ export default function EnhancedDataTable({
     auditableType,
     transactionType,
     additionalActionButtons,
+    additionalTools,
 }: DataTableProps) {
     // Helper function to clear all localStorage for this table
     const clearAllLocalStorage = () => {
@@ -736,13 +738,16 @@ export default function EnhancedDataTable({
                                 )}
 
                                 {canCreate ? (
-                                    <Button
+                                    <>
+                                        <Button
 
-                                        onClick={onCreate}
-                                    >
-                                        <Plus className="h-4 w-4 mr-2" />
-                                        Add New
-                                    </Button>
+                                            onClick={onCreate}
+                                        >
+                                            <Plus className="h-4 w-4 mr-2" />
+                                            Add New
+                                        </Button>
+                                        {additionalTools}
+                                    </>
                                 ) : null}
                             </div>
                         </div>
@@ -812,9 +817,6 @@ export default function EnhancedDataTable({
                                                 </Button>
                                             </TableHead>
                                         ))}
-                                        <TableHead className="font-semibold text-gray-900 dark:text-gray-100">
-
-                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -1016,61 +1018,6 @@ export default function EnhancedDataTable({
                                                         {column.cell(row)}
                                                     </TableCell>
                                                 ))}
-
-                                                <TableCell>
-                                                    {auditableType ? (
-                                                        <AuditDialog
-                                                            auditableType={auditableType}
-                                                            auditableId={row.id}
-                                                            trigger={
-                                                                <Button variant="outline" size="sm" >
-                                                                    <Logs className="h-1 w-1 " />
-                                                                </Button>
-                                                            }
-                                                        />
-                                                    ) : (
-                                                        <div className="space-y-1 text-xs">
-                                                            <div className="flex items-center gap-2">
-                                                                <Badge variant="outline" className="text-xs">
-                                                                    Created
-                                                                </Badge>
-                                                                <span className="text-gray-600 dark:text-gray-400">{row.entry_by || "System"}</span>
-                                                            </div>
-                                                            <div className="text-gray-500 dark:text-gray-500">
-                                                                {row.entry_at ? moment(row.entry_at).format("DD/MM/YYYY HH:mm") : "-"}
-                                                            </div>
-                                                            {row.last_edit_by && (
-                                                                <>
-                                                                    <div className="flex items-center gap-2">
-                                                                        <Badge variant="outline" className="text-xs">
-                                                                            Updated
-                                                                        </Badge>
-                                                                        <span className="text-gray-600 dark:text-gray-400">{row.last_edit_by}</span>
-                                                                    </div>
-                                                                    <div className="text-gray-500 dark:text-gray-500">
-                                                                        {row.last_edit_at ? moment(row.last_edit_at).format("DD/MM/YYYY HH:mm") : "-"}
-                                                                    </div>
-                                                                </>
-                                                            )}
-                                                            {row.deleted_by && (
-                                                                <>
-                                                                    <div className="flex items-center gap-2">
-                                                                        <Badge variant="outline" className="text-xs">
-                                                                            Deleted
-                                                                        </Badge>
-                                                                        <span className="text-gray-600 dark:text-gray-400">{row.deleted_by}</span>
-                                                                    </div>
-                                                                    <div className="text-gray-500 dark:text-gray-500">
-                                                                        {row.delete_reason ? `${row.delete_reason}` : "No reason provided"}
-                                                                    </div>
-                                                                    <div className="text-gray-500 dark:text-gray-500">
-                                                                        {row.deleted_at ? moment(row.deleted_at).format("DD/MM/YYYY HH:mm") : "-"}
-                                                                    </div>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </TableCell>
                                             </TableRow>
                                         ))
                                     )}

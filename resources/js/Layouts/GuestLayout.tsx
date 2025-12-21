@@ -10,11 +10,11 @@ export default function Guest({ children }: PropsWithChildren) {
             <div>
                 <Link href="/">
                     <img
-                        src={`/storage/${setting.logo}`}
-                        className="flex h-32 items-center justify-center rounded-lg  text-sidebar-primary-foreground mb-3" />
+                        src={`/assets/images/logo.png`}
+                        className="flex h-32 items-center justify-center rounded-lg  text-sidebar-primary-foreground mb-3 bg-black p-4" />
                 </Link>
             </div>
-            <Card className='min-w-7xl mx-auto'>
+            <Card style={{ width : '350px'}}>
                 <CardHeader></CardHeader>
                 <CardContent>
                     {children}

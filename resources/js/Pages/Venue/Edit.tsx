@@ -11,6 +11,8 @@ export default function Edit({ venue }: any) {
   return (
     <VenueForm
       initialData={venue}
+      initialFacilities={venue.facilities}
+      initialPhotos={venue.photos}
       onSubmit={handleSubmit}
       submitButtonText="Ubah"
       successMessage="Data venue berhasil diubah"
