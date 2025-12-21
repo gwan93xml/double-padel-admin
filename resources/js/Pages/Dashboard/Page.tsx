@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
 
 type PageProps = {
     statistics: {
@@ -357,9 +356,9 @@ export default function Page({
                                         border: '1px solid rgba(0,0,0,0.1)',
                                         borderRadius: '8px'
                                     }}
-                                    formatter={(value, name) => {
+                                    formatter={(value : any, name) => {
                                         if (name === 'revenue') {
-                                            return [`Rp ${(value / 1000000).toFixed(2)}M`, 'Revenue'];
+                                            return [`Rp ${((value) ?? 0).toFixed(2)}M`, 'Revenue'];
                                         }
                                         return [value, 'Booking'];
                                     }}

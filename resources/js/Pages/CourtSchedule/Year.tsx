@@ -70,7 +70,10 @@ export default function Year({
                 result[date] = { available: 0, booked: 0, closed: 0, total: 0 };
             }
             result[date].total++;
-            result[date][schedule.status]++;
+            const status = schedule.status as keyof Omit<MonthlySchedule, 'total'>;
+            if (status === 'available' || status === 'booked' || status === 'closed') {
+                result[date][status]++;
+            }
         });
         return result;
     }, [schedules]);
@@ -89,10 +92,10 @@ export default function Year({
     };
 
     const getStatusColor = (available: number, booked: number, closed: number, total: number) => {
-        if (total === 0) return "bg-gray-50";
-        if (closed > 0) return "bg-red-50";
-        if (booked > 0) return "bg-yellow-50";
-        return "bg-green-50";
+        if (total === 0) return "border ";
+        if (closed > 0) return "bg-red-50 dark:bg-red-900/30";
+        if (booked > 0) return "bg-yellow-50 dark:bg-yellow-900/30";
+        return "bg-green-50 dark:bg-green-900/30";
     };
 
     const handlePrevYear = () => {
@@ -138,7 +141,7 @@ export default function Year({
         }
 
         return (
-            <div key={month} className="border rounded-lg p-3 bg-white">
+            <div key={month} className="border rounded-lg p-3 ">
                 <h3 className="font-semibold text-sm mb-2 text-center">{MONTHS[month - 1]}</h3>
                 
                 {/* Day headers */}
@@ -157,7 +160,7 @@ export default function Year({
                             return (
                                 <div
                                     key={`empty-${index}`}
-                                    className="aspect-square bg-gray-50 rounded text-xs"
+                                    className="aspect-square  rounded text-xs"
                                 />
                             );
                         }
@@ -178,7 +181,7 @@ export default function Year({
                                 title={`${MONTHS[month - 1]} ${day}: ${dayStats.total} jadwal (${dayStats.available} tersedia, ${dayStats.booked} dipesan, ${dayStats.closed} ditutup)`}
                             >
                                 <div className="h-full flex flex-col justify-between">
-                                    <span className="font-semibold text-gray-700">{day}</span>
+                                    <span className="font-semibold ">{day}</span>
                                     {dayStats.total > 0 && (
                                         <div className="text-xs space-y-0.5">
                                             {dayStats.available > 0 && (
@@ -220,7 +223,7 @@ export default function Year({
                                 onClick={() => {
                                     const params = new URLSearchParams();
                                     if (selectedCourtId) params.append("court_id", selectedCourtId.toString());
-                                    params.append("month", new Date().getMonth() + 1);
+                                    params.append("month", (new Date().getMonth() + 1).toString());
                                     params.append("year", currentYear.toString());
                                     router.visit(`/court-schedule/calendar?${params.toString()}`);
                                 }}

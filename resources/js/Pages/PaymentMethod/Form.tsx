@@ -36,7 +36,10 @@ export default function PaymentMethodForm({
 
     const [processing, setProcessing] = useState(false);
     const [howToPay, setHowToPay] = useState<Array<{ channel: string; steps: string[] }>>(
-        initialData?.how_to_pay || []
+        (initialData?.how_to_pay || []).map(item => ({
+            channel: item.channel || '',
+            steps: item.steps || []
+        }))
     );
     const [activeTab, setActiveTab] = useState<string>(
         howToPay.length > 0 ? '0' : ''
@@ -193,6 +196,7 @@ export default function PaymentMethodForm({
                             error={errors.image}
                         >
                             <ImageUploader
+                                maxHeight={300}
                                 label=""
                                 initialValue={data.image}
                                 onSuccess={(url) => {
@@ -303,7 +307,6 @@ export default function PaymentMethodForm({
                                                                             updateChannelStep(channelIndex, stepIndex, e.target.value)
                                                                         }
                                                                         placeholder="Contoh: Buka aplikasi BCA..."
-                                                                        size="sm"
                                                                     />
                                                                 </div>
                                                                 <div className="flex items-center">

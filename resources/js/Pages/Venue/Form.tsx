@@ -14,6 +14,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
 import { VenueType } from "./@types/venue-type";
+import { Textarea } from "@/Components/ui/textarea";
 
 interface Facility {
     id?: number;
@@ -160,13 +161,12 @@ export default function VenueForm({
 
                         <div className="lg:col-span-2">
                             <FormGroup label="Deskripsi" error={errors.description} required>
-                                <textarea
+                                <Textarea
                                     value={data.description}
                                     onChange={(e) => {
                                         setData("description", e.target.value);
                                     }}
                                     placeholder="Deskripsi venue"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     rows={4}
                                 />
                             </FormGroup>
@@ -196,13 +196,12 @@ export default function VenueForm({
 
                         <div className="lg:col-span-2">
                             <FormGroup label="Alamat" error={errors.address} required>
-                                <textarea
+                                <Textarea
                                     value={data.address}
                                     onChange={(e) => {
                                         setData("address", e.target.value);
                                     }}
                                     placeholder="Alamat lengkap venue"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     rows={3}
                                 />
                             </FormGroup>
@@ -390,7 +389,7 @@ export default function VenueForm({
                                                     placeholder="Contoh: WiFi, Parkir, Toilet"
                                                 />
                                             </div>
-                                    <div>
+                                            <div>
                                                 <label className="block text-sm font-semibold mb-2">
                                                     Icon/Gambar
                                                 </label>

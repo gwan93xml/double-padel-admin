@@ -10,6 +10,11 @@ class CourtSchedule extends Model
 {
     use HasFactory;
 
+    public const STATUS_AVAILABLE = 'available';
+    public const STATUS_BOOKED = 'booked';
+    public const STATUS_WAITING_FOR_PAYMENT = 'waiting_for_payment';
+
+
     protected $fillable = [
         'court_id',
         'user_id',

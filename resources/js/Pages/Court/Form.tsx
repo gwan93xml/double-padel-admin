@@ -1,6 +1,13 @@
 import { Button } from "@/Components/ui/button";
 import FormGroup from "@/Components/ui/form-group";
 import { Input } from "@/Components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/Components/ui/select";
 import ImageUploader from "@/Components/ImageUploader";
 import { toast } from "@/hooks/use-toast";
 import { router, useForm } from "@inertiajs/react";
@@ -75,20 +82,18 @@ export default function CourtForm({
     <div className="p-5">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-4">
         <FormGroup label="Venue" error={errors.venue_id} required>
-          <select
-            value={data.venue_id}
-            onChange={(e) => {
-              setData("venue_id", parseInt(e.target.value));
-            }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Pilih Venue</option>
-            {venues.map((venue) => (
-              <option key={venue.id} value={venue.id}>
-                {venue.name}
-              </option>
-            ))}
-          </select>
+          <Select value={data.venue_id.toString()} onValueChange={(value) => setData("venue_id", parseInt(value))}>
+            <SelectTrigger>
+              <SelectValue placeholder="Pilih Venue" />
+            </SelectTrigger>
+            <SelectContent>
+              {venues.map((venue) => (
+                <SelectItem key={venue.id} value={venue.id.toString()}>
+                  {venue.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </FormGroup>
 
         <FormGroup label="Nama Court" error={errors.name} required>
@@ -137,19 +142,18 @@ export default function CourtForm({
         </FormGroup>
 
         <FormGroup label="Status" error={errors.status} required>
-          <select
-            value={data.status}
-            onChange={(e) => {
-              setData("status", e.target.value as "available" | "maintenance" | "closed");
-            }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {statusOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <Select value={data.status} onValueChange={(value) => setData("status", value as "available" | "maintenance" | "closed")}>
+            <SelectTrigger>
+              <SelectValue placeholder="Pilih Status" />
+            </SelectTrigger>
+            <SelectContent>
+              {statusOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </FormGroup>
 
         <FormGroup label="Gambar" error={errors.image}>

@@ -3,6 +3,7 @@
 import DataTable from "@/Components/DataTable";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Button } from "@/Components/ui/button";
+import CourtScheduleStatus from "@/Components/CourtScheduleStatus";
 import { useState } from "react";
 import axios from "axios";
 import { router } from "@inertiajs/react";
@@ -66,7 +67,7 @@ export default function Page() {
                     {
                         accessorKey: 'status',
                         header: 'Status',
-                        cell: (info) => info.status,
+                        cell: (info) => <CourtScheduleStatus status={info.status} />,
                     },
                 ]}
                 apiUrl="/court-schedule"

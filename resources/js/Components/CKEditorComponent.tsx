@@ -27,7 +27,7 @@ export default function CKEditorComponent({
             )}>
                 <CKEditor
                 
-                    editor={ClassicEditor}
+                    editor={ClassicEditor as any}
                     data={value || ""}
                     disabled={disabled}
                     config={{

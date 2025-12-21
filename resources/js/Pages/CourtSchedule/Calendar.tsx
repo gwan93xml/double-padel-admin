@@ -234,7 +234,7 @@ export default function Calendar({
                                             className={`min-h-32 p-2 border rounded-lg cursor-pointer transition-all ${
                                                 day === null
                                                     ? "bg-gray-50"
-                                                    : "bg-white border-gray-200 hover:bg-blue-50 hover:border-blue-300"
+                                                    : "   hover:border-blue-300"
                                             }`}
                                             onClick={() => day && setSelectedDay(day)}
                                         >

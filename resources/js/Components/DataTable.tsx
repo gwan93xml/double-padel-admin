@@ -49,8 +49,6 @@ import { PromiseAlertDialog, showAlertDialog } from "./ui/promise-alert-dialog"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog"
 import { toast } from "@/hooks/use-toast"
 import FormGroup from "./ui/form-group"
-import SearchDivision from "./SearchDivision"
-import SelectAssetType from "./select-asset-type"
 import AuditDialog from "./audit-dialog"
 import { PromiseAlertDialogWithReason, showAlertDialogWithReason } from "./ui/promise-alert-dialog-with-reason"
 import { useJournalDialog } from "@/hooks/use-journal-dialog"
@@ -537,24 +535,6 @@ export default function EnhancedDataTable({
                     </FormGroup>
                 )
 
-            case 'select-asset-type':
-                return (
-                    <FormGroup key={filter.key} label={filter.label}>
-                        <SelectAssetType
-                            value={additionalFilterValues[filter.key] ? {
-                                id: additionalFilterValues[filter.key],
-                                name: additionalFilterValues[filter.key + '_name'] || '',
-                                description: additionalFilterValues[filter.key + '_description'] || ''
-                            } : undefined}
-                            onChange={(assetType) => {
-                                handleAdditionalFilterChange(filter.key, assetType.id)
-                                handleAdditionalFilterChange(filter.key + '_name', assetType.name)
-                                handleAdditionalFilterChange(filter.key + '_description', assetType.description)
-                            }}
-                            clearable={true}
-                        />
-                    </FormGroup>
-                )
 
             default:
                 return null
@@ -647,23 +627,7 @@ export default function EnhancedDataTable({
                                     />
                                 </div>
                             </div>
-                            {isFilterDivision && (
-                                <>
-                                    <div className="lg:col-span-5">
-                                        <FormGroup
-                                            label="Divisi"
-                                        >
-                                            <SearchDivision
-                                                onChange={(division: any) => {
-                                                    setDivision(division)
-                                                }}
-                                                value={division}
-                                                clearable
-                                            />
-                                        </FormGroup>
-                                    </div>
-                                </>
-                            )}
+                           
 
                             {/* Date Filters */}
                             {isFilterDate && (

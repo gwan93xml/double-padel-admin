@@ -1,1 +1,0 @@
-import{q as t}from"./app-CQ-G37p-.js";function u(r){if(!r)return!0;const o=t().props.auth.user.roles.flatMap(s=>s.permissions.map(e=>e.name));return Array.isArray(r)?r.some(s=>o.includes(s)):o.includes(r)}export{u as c};
