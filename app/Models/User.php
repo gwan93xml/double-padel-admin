@@ -28,6 +28,7 @@ class User extends Authenticatable implements AuditableContract
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_type',
         'name',
         'email',
         'password',
