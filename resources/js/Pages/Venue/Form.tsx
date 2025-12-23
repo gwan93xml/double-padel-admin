@@ -302,6 +302,7 @@ export default function VenueForm({
                                                     Photo
                                                 </label>
                                                 <ImageUploader
+                                                    maxHeight={200}
                                                     label=""
                                                     initialValue={photo.file}
                                                     onSuccess={(url) => {
@@ -394,6 +395,7 @@ export default function VenueForm({
                                                     Icon/Gambar
                                                 </label>
                                                 <ImageUploader
+                                                    maxHeight={100}
                                                     label=""
                                                     initialValue={facility.icon}
                                                     onSuccess={(url) => {

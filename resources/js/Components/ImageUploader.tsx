@@ -156,13 +156,13 @@ export default function ImageUploader({
                 </div>
             ) : (
                 <div className="space-y-3">
-                    <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-gray-200 bg-gray-100"
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden border  bg-white dark:bg-black "
                         style={maxHeight ? { maxHeight: `${maxHeight}px` } : {}}
                     >
                         <img
                             src={preview}
                             alt="Preview"
-                            className="h-full object-center"
+                            className="h-full object-center bg-white"
                             style={maxHeight ? { maxHeight: `${maxHeight}px` } : {}}
                         />
                     </div>

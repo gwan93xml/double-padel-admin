@@ -373,7 +373,7 @@ export default function BulkGenerate({ courts }: Props) {
                                                         Pilih Semua ({dateSlots[date]?.size || 0}/{timeSlots.length})
                                                     </label>
                                                 </div>
-                                                <div className="grid grid-cols-6 gap-2 p-3 bg-gray-50 rounded">
+                                                <div className="grid grid-cols-6 gap-2 p-3 bg-gray-50 dark:bg-gray-950 rounded">
                                                     {timeSlots.map((slot, index) => (
                                                         <div key={index} className="flex items-center gap-1">
                                                             <Checkbox
@@ -393,7 +393,7 @@ export default function BulkGenerate({ courts }: Props) {
                                             </div>
 
                                             {getSelectedSlotsForDate(date).length > 0 && (
-                                                <div className="space-y-2 p-3 bg-blue-50 rounded">
+                                                <div className="space-y-2 p-3 bg-black-50 dark:bg-black-950 rounded">
                                                     <h4 className="font-medium text-sm">Harga untuk slot yang dipilih:</h4>
                                                     <div className="grid grid-cols-3 gap-3">
                                                         {getSelectedSlotsForDate(date).map(({ index, slot }) => (
