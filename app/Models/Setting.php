@@ -13,6 +13,13 @@ class Setting extends Model
         'company_name',
         'favicon',
         'address',
+        'booking_url',
+        'home_navigations',
+        'home_hero_image',
+    ];
+
+    protected $casts = [
+        'home_navigations' => 'array',
     ];
 
 }
