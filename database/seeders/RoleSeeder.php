@@ -39,6 +39,18 @@ class RoleSeeder extends Seeder
             'create-module',
             'update-module',
             'delete-module',
+            'read-update-category',
+            'create-update-category',
+            'update-update-category',
+            'delete-update-category',
+            'read-update',
+            'create-update',
+            'update-update',
+            'delete-update',
+            'read-home-navigation',
+            'create-home-navigation',
+            'update-home-navigation',
+            'delete-home-navigation',
         ];
         foreach($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);

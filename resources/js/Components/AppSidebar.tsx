@@ -88,7 +88,7 @@ const navList = [
         name: "CMS",
         icon: <NewspaperIcon />,
         link: "#",
-        permission: ['read-blog-category', 'read-blog', 'read-testimony'],
+        permission: ['read-blog-category', 'read-blog', 'read-update-category', 'read-update', 'read-home-navigation', 'read-testimony'],
         children: [
             {
                 name: "Kategori Blog",
@@ -99,6 +99,21 @@ const navList = [
                 name: "Blog",
                 link: "/blog",
                 permission: 'read-blog',
+            },
+            {
+                name: "Kategori Update",
+                link: "/update-category",
+                permission: 'read-update-category',
+            },
+            {
+                name: "Update",
+                link: "/update",
+                permission: 'read-update',
+            },
+            {
+                name: "Home Navigation",
+                link: "/home-navigation",
+                permission: 'read-home-navigation',
             },
             {
                 name: "Testimoni",

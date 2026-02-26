@@ -32,15 +32,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/audits/bulk', [App\Http\Controllers\AuditController::class, 'bulk'])->name('audits.bulk');
         Route::get('/audits/detail', [App\Http\Controllers\AuditController::class, 'detail'])->name('audits.detail');
     });
-    
-    // Stock Analysis Routes
-    Route::prefix('admin/stock-analysis')->group(function () {
-        Route::get('/item/{itemId}/actual-stock', [App\Http\Controllers\StockAnalysisController::class, 'showActualStock'])->name('stock-analysis.actual-stock');
-        Route::get('/comparison', [App\Http\Controllers\StockAnalysisController::class, 'stockComparison'])->name('stock-analysis.comparison');
-        Route::post('/bulk-actual-stock', [App\Http\Controllers\StockAnalysisController::class, 'bulkActualStock'])->name('stock-analysis.bulk-actual-stock');
-        Route::get('/variance-report', [App\Http\Controllers\StockAnalysisController::class, 'stockVarianceReport'])->name('stock-analysis.variance-report');
-        Route::post('/item/{itemId}/reconcile', [App\Http\Controllers\StockAnalysisController::class, 'reconcileStock'])->name('stock-analysis.reconcile');
-    });
 });
 
 //require all file inside web folder
