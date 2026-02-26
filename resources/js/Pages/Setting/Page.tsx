@@ -93,6 +93,15 @@ export default function Page({ setting }: any) {
                                     />
                                 </FormGroup>
                                 <FormGroup
+                                    label="WhatsApp URL"
+                                    error={errors.whatsapp_url}
+                                >
+                                    <Input
+                                        value={data.whatsapp_url}
+                                        onChange={(e) => setData('whatsapp_url', e.target.value)}
+                                    />
+                                </FormGroup>
+                                <FormGroup
                                     label="Logo"
                                     error={errors.logo}
                                 >

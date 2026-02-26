@@ -7,6 +7,7 @@ export type SettingType = {
     favicon?: string
     address?: string
     booking_url?: string
+    whatsapp_url?: string
     home_navigations?: Array<{
         title: string
         href: string

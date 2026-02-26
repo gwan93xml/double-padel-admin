@@ -24,6 +24,7 @@ class StoreController extends Controller
             'home_hero_image' => 'nullable|string',
             'home_navigations' => 'nullable|array',
             'booking_url' => 'nullable|string',
+            'whatsapp_url' => 'nullable|string',
         ], [
             'app_name.required' => 'Kolom nama aplikasi harus diisi',
             'app_title.required' => 'Kolom judul aplikasi harus diisi',
@@ -43,6 +44,7 @@ class StoreController extends Controller
                     'home_hero_image' => $request->home_hero_image,
                     'home_navigations' => $request->home_navigations,
                     'booking_url' => $request->booking_url,
+                    'whatsapp_url' => $request->whatsapp_url,
                 ]);
             } else {
                 Setting::create([
@@ -55,6 +57,7 @@ class StoreController extends Controller
                     'home_hero_image' => $request->home_hero_image,
                     'home_navigations' => $request->home_navigations,
                     'booking_url' => $request->booking_url,
+                    'whatsapp_url' => $request->whatsapp_url,
                 ]);
             }
             DB::commit();

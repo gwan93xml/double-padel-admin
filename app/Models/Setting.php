@@ -14,6 +14,7 @@ class Setting extends Model
         'favicon',
         'address',
         'booking_url',
+        'whatsapp_url',
         'home_navigations',
         'home_hero_image',
     ];
