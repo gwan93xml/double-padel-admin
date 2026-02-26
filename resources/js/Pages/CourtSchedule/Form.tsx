@@ -42,6 +42,7 @@ export default function CourtScheduleForm({
         start_time: initialData?.start_time || '',
         end_time: initialData?.end_time || '',
         price: initialData?.price || '',
+        normal_price: initialData?.normal_price || initialData?.price || '',
         status: initialData?.status || 'available',
     } as any);
 
@@ -159,18 +160,33 @@ export default function CourtScheduleForm({
                             </FormGroup>
                         </div>
 
-                        <FormGroup
-                            label="Harga"
-                            error={errors.price}
-                            required
-                        >
-                            <Input
-                                type="number"
-                                value={data.price || ''}
-                                onChange={(e) => setData('price', e.target.value)}
-                                min="0"
-                            />
-                        </FormGroup>
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormGroup
+                                label="Harga"
+                                error={errors.price}
+                                required
+                            >
+                                <Input
+                                    type="number"
+                                    value={data.price || ''}
+                                    onChange={(e) => setData('price', e.target.value)}
+                                    min="0"
+                                />
+                            </FormGroup>
+
+                            <FormGroup
+                                label="Harga Normal"
+                                error={errors.normal_price}
+                                required
+                            >
+                                <Input
+                                    type="number"
+                                    value={data.normal_price || ''}
+                                    onChange={(e) => setData('normal_price', e.target.value)}
+                                    min="0"
+                                />
+                            </FormGroup>
+                        </div>
 
                         <FormGroup
                             label="Status"

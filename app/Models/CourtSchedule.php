@@ -22,6 +22,7 @@ class CourtSchedule extends Model
         'start_time',
         'end_time',
         'price',
+        'normal_price',
         'status',
     ];
 
@@ -29,6 +30,7 @@ class CourtSchedule extends Model
         'start_time' => 'datetime:H:i',
         'end_time' => 'datetime:H:i',
         'price' => 'integer',
+        'normal_price' => 'integer',
     ];
 
     /**

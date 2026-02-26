@@ -6,6 +6,7 @@ export interface CourtSchedule {
   start_time: string;
   end_time: string;
   price: number;
+  normal_price: number | null;
   status: 'available' | 'booked' | 'closed';
   created_at: string;
   updated_at: string;

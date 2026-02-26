@@ -20,6 +20,7 @@ class BulkGenerateStoreController extends Controller
             'time_slots.*.start_time' => 'required|date_format:H:i',
             'time_slots.*.end_time' => 'required|after:time_slots.*.start_time',
             'time_slots.*.price' => 'required|integer|min:0',
+            'time_slots.*.normal_price' => 'nullable|integer|min:0',
         ]);
 
         $schedules = [];
@@ -41,6 +42,7 @@ class BulkGenerateStoreController extends Controller
                     'start_time' => $slot['start_time'],
                     'end_time' => $slot['end_time'],
                     'price' => $slot['price'],
+                    'normal_price' => $slot['normal_price'] ?? $slot['price'],
                     'status' => $validated['status'],
                     'created_at' => now(),
                     'updated_at' => now(),

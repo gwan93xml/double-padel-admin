@@ -18,8 +18,11 @@ class UpdateController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i',
             'price' => 'required|integer|min:0',
+            'normal_price' => 'nullable|integer|min:0',
             'status' => 'required|in:available,booked,closed',
         ]);
+
+        $validated['normal_price'] = $validated['normal_price'] ?? $validated['price'];
 
         $courtSchedule->update($validated);
         $courtSchedule->court->venue->updatePriceRange();

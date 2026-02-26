@@ -17,8 +17,12 @@ class StoreController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'price' => 'required|integer|min:0',
+            'normal_price' => 'nullable|integer|min:0',
             'status' => 'required|in:available,booked,closed',
         ]);
+
+        $validated['normal_price'] = $validated['normal_price'] ?? $validated['price'];
+
         $courtSchedule = CourtSchedule::create($validated);
         $courtSchedule->court->venue->updatePriceRange();
         return response()->json(['message' => 'Court Schedule created successfully']);

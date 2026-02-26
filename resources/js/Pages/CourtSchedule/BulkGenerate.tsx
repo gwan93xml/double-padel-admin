@@ -46,11 +46,13 @@ export default function BulkGenerate({ courts }: Props) {
         start_date: '',
         end_date: '',
         default_price: '',
+        default_normal_price: '',
         status: 'available',
     } as any);
 
     const [dateSlots, setDateSlots] = useState<DateSlots>({});
     const [slotPrices, setSlotPrices] = useState<SlotPrices>({});
+    const [slotNormalPrices, setSlotNormalPrices] = useState<SlotPrices>({});
     const [processing, setProcessing] = useState(false);
 
     // Generate 24 time slots (00:00-01:00 to 23:00-24:00)
@@ -104,14 +106,20 @@ export default function BulkGenerate({ courts }: Props) {
         if (newSelected.has(index)) {
             newSelected.delete(index);
             const newPrices = { ...slotPrices };
+            const newNormalPrices = { ...slotNormalPrices };
             delete newPrices[slotKey];
+            delete newNormalPrices[slotKey];
             setSlotPrices(newPrices);
+            setSlotNormalPrices(newNormalPrices);
         } else {
             newSelected.add(index);
             // Initialize with default price
             const newPrices = { ...slotPrices };
+            const newNormalPrices = { ...slotNormalPrices };
             newPrices[slotKey] = data.default_price || '';
+            newNormalPrices[slotKey] = data.default_normal_price || data.default_price || '';
             setSlotPrices(newPrices);
+            setSlotNormalPrices(newNormalPrices);
         }
         newDateSlots[date] = newSelected;
         setDateSlots(newDateSlots);
@@ -124,6 +132,13 @@ export default function BulkGenerate({ courts }: Props) {
         setSlotPrices(newPrices);
     };
 
+    const updateSlotNormalPrice = (date: string, index: number, price: string) => {
+        const slotKey = `${date}-${index}`;
+        const newNormalPrices = { ...slotNormalPrices };
+        newNormalPrices[slotKey] = price;
+        setSlotNormalPrices(newNormalPrices);
+    };
+
     const selectAllForDate = (date: string) => {
         const newDateSlots = { ...dateSlots };
         const currentSet = newDateSlots[date];
@@ -131,16 +146,22 @@ export default function BulkGenerate({ courts }: Props) {
 
         if (currentSet.size === timeSlots.length) {
             // Deselect all
+            const newNormalPrices = { ...slotNormalPrices };
             timeSlots.forEach((_, index) => {
                 delete newPrices[`${date}-${index}`];
+                delete newNormalPrices[`${date}-${index}`];
             });
             newDateSlots[date] = new Set();
+            setSlotNormalPrices(newNormalPrices);
         } else {
             // Select all
             newDateSlots[date] = new Set(Array.from({ length: timeSlots.length }, (_, i) => i));
+            const newNormalPrices = { ...slotNormalPrices };
             timeSlots.forEach((_, index) => {
                 newPrices[`${date}-${index}`] = data.default_price || '';
+                newNormalPrices[`${date}-${index}`] = data.default_normal_price || data.default_price || '';
             });
+            setSlotNormalPrices(newNormalPrices);
         }
         setDateSlots(newDateSlots);
         setSlotPrices(newPrices);
@@ -159,24 +180,40 @@ export default function BulkGenerate({ courts }: Props) {
         setSlotPrices(newPrices);
     };
 
+    const updateDefaultNormalPrice = (price: string) => {
+        setData('default_normal_price', price);
+        const newNormalPrices: SlotPrices = {};
+        Object.entries(dateSlots).forEach(([date, slotIndices]) => {
+            slotIndices.forEach(index => {
+                const slotKey = `${date}-${index}`;
+                newNormalPrices[slotKey] = price;
+            });
+        });
+        setSlotNormalPrices(newNormalPrices);
+    };
+
     const selectAllAllDates = () => {
         const newDateSlots: DateSlots = {};
         const newPrices: SlotPrices = {};
+        const newNormalPrices: SlotPrices = {};
 
         dates.forEach(date => {
             newDateSlots[date] = new Set(Array.from({ length: timeSlots.length }, (_, i) => i));
             timeSlots.forEach((_, index) => {
                 newPrices[`${date}-${index}`] = data.default_price || '';
+                newNormalPrices[`${date}-${index}`] = data.default_normal_price || data.default_price || '';
             });
         });
 
         setDateSlots(newDateSlots);
         setSlotPrices(newPrices);
+        setSlotNormalPrices(newNormalPrices);
     };
 
     const deselectAllAllDates = () => {
         setDateSlots({});
         setSlotPrices({});
+        setSlotNormalPrices({});
     };
 
     const totalSelectedSlots = Object.values(dateSlots).reduce((sum, set) => sum + set.size, 0);
@@ -212,6 +249,7 @@ export default function BulkGenerate({ courts }: Props) {
                         date,
                         ...timeSlots[index],
                         price: slotPrices[`${date}-${index}`],
+                        normal_price: slotNormalPrices[`${date}-${index}`],
                     }));
             });
 
@@ -309,19 +347,35 @@ export default function BulkGenerate({ courts }: Props) {
                             </FormGroup>
                         </div>
 
-                        <FormGroup
-                            label="Harga Default"
-                            error={errors.default_price}
-                            required
-                        >
-                            <Input
-                                type="number"
-                                value={data.default_price || ''}
-                                onChange={(e) => updateDefaultPrice(e.target.value)}
-                                min="0"
-                                placeholder="Harga default untuk semua slot"
-                            />
-                        </FormGroup>
+                        <div className="grid grid-cols-2 gap-4">
+                            <FormGroup
+                                label="Harga Default"
+                                error={errors.default_price}
+                                required
+                            >
+                                <Input
+                                    type="number"
+                                    value={data.default_price || ''}
+                                    onChange={(e) => updateDefaultPrice(e.target.value)}
+                                    min="0"
+                                    placeholder="Harga default untuk semua slot"
+                                />
+                            </FormGroup>
+
+                            <FormGroup
+                                label="Harga Normal Default"
+                                error={errors.default_normal_price}
+                                required
+                            >
+                                <Input
+                                    type="number"
+                                    value={data.default_normal_price || ''}
+                                    onChange={(e) => updateDefaultNormalPrice(e.target.value)}
+                                    min="0"
+                                    placeholder="Harga normal default"
+                                />
+                            </FormGroup>
+                        </div>
 
                         {dates.length > 0 && (
                             <FormGroup label="Jam Operasional per Tanggal" required>
@@ -395,10 +449,10 @@ export default function BulkGenerate({ courts }: Props) {
                                             {getSelectedSlotsForDate(date).length > 0 && (
                                                 <div className="space-y-2 p-3 bg-black-50 dark:bg-black-950 rounded">
                                                     <h4 className="font-medium text-sm">Harga untuk slot yang dipilih:</h4>
-                                                    <div className="grid grid-cols-3 gap-3">
+                                                    <div className="grid grid-cols-2 gap-3">
                                                         {getSelectedSlotsForDate(date).map(({ index, slot }) => (
-                                                            <div key={index} className="space-y-1">
-                                                                <label className="text-xs font-medium">
+                                                            <div key={index} className="space-y-2 p-2 rounded border">
+                                                                <label className="text-xs font-medium block">
                                                                     {slot.start_time}-{slot.end_time}
                                                                 </label>
                                                                 <Input
@@ -407,6 +461,14 @@ export default function BulkGenerate({ courts }: Props) {
                                                                     onChange={(e) => updateSlotPrice(date, index, e.target.value)}
                                                                     min="0"
                                                                     placeholder="Harga"
+                                                                    className="h-8"
+                                                                />
+                                                                <Input
+                                                                    type="number"
+                                                                    value={slotNormalPrices[`${date}-${index}`] || ''}
+                                                                    onChange={(e) => updateSlotNormalPrice(date, index, e.target.value)}
+                                                                    min="0"
+                                                                    placeholder="Harga Normal"
                                                                     className="h-8"
                                                                 />
                                                             </div>

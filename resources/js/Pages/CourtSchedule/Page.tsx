@@ -65,6 +65,13 @@ export default function Page() {
                         cell: (info) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(info.price),
                     },
                     {
+                        accessorKey: 'normal_price',
+                        header: 'Harga Normal',
+                        cell: (info) => info.normal_price !== null && info.normal_price !== undefined
+                            ? new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(info.normal_price)
+                            : '-',
+                    },
+                    {
                         accessorKey: 'status',
                         header: 'Status',
                         cell: (info) => <CourtScheduleStatus status={info.status} />,
