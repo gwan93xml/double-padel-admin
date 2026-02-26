@@ -55,10 +55,10 @@ export default function BulkGenerate({ courts }: Props) {
     const [slotNormalPrices, setSlotNormalPrices] = useState<SlotPrices>({});
     const [processing, setProcessing] = useState(false);
 
-    // Generate 24 time slots (00:00-01:00 to 23:00-24:00)
+    // Generate time slots from 06:00-07:00 to 22:00-23:00
     const timeSlots = useMemo(() => {
         const slots: TimeSlot[] = [];
-        for (let i = 0; i < 24; i++) {
+        for (let i = 6; i < 24; i++) {
             const startHours = String(i).padStart(2, '0');
             const endHours = String(i + 1).padStart(2, '0');
             slots.push({
