@@ -8,7 +8,7 @@ interface HomeNavigation {
     title: string;
     href: string;
     image: string;
-    icon: string;
+    image_dark: string;
 }
 
 interface HomeNavigationsTableProps {
@@ -22,7 +22,7 @@ export default function HomeNavigationsTable({ value = [], onChange }: HomeNavig
             title: '',
             href: '',
             image: '',
-            icon: ''
+            image_dark: ''
         }];
         onChange(newNavigations);
     };
@@ -50,7 +50,7 @@ export default function HomeNavigationsTable({ value = [], onChange }: HomeNavig
                         <tr>
                             <th className="text-left p-2 font-medium text-sm">Title</th>
                             <th className="text-left p-2 font-medium text-sm">URL</th>
-                            <th className="text-left p-2 font-medium text-sm">Icon</th>
+                            <th className="text-left p-2 font-medium text-sm">Image Dark</th>
                             <th className="text-left p-2 font-medium text-sm">Image</th>
                             <th className="text-center p-2 font-medium text-sm w-20">Aksi</th>
                         </tr>
@@ -75,11 +75,24 @@ export default function HomeNavigationsTable({ value = [], onChange }: HomeNavig
                                     />
                                 </td>
                                 <td className="p-2">
-                                    <Input
-                                        value={nav.icon || ''}
-                                        onChange={(e) => handleUpdate(index, 'icon', e.target.value)}
-                                        placeholder="Icon"
-                                        className="h-8"
+                                    <ImageUploader
+                                        maxHeight={150}
+                                        label=""
+                                        initialValue={nav.image_dark}
+                                        onSuccess={(url) => {
+                                            handleUpdate(index, 'image_dark', url);
+                                            toast({
+                                                title: 'Sukses',
+                                                description: 'Gambar dark berhasil diunggah',
+                                            });
+                                        }}
+                                        onError={(error) => {
+                                            toast({
+                                                variant: 'destructive',
+                                                title: 'Gagal',
+                                                description: error,
+                                            });
+                                        }}
                                     />
                                 </td>
                                 <td className="p-2">
