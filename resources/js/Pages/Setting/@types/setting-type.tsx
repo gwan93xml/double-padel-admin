@@ -12,7 +12,7 @@ export type SettingType = {
         title: string
         href: string
         image: string
-        icon: string
+        image_dark: string
     }>
     home_hero_image?: string
 }
