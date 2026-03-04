@@ -19,6 +19,7 @@ class Venue extends Model
         'address',
         'latitude',
         'longitude',
+        'map_link',
         'min_price',
         'max_price',
         'average_rating',

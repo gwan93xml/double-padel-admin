@@ -8,6 +8,7 @@ export interface VenueType {
   address: string;
   latitude: number;
   longitude: number;
+  map_link?: string;
   min_price?: number | null;
   max_price?: number | null;
   average_rating?: number | null;

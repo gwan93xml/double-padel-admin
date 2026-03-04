@@ -48,6 +48,7 @@ export default function VenueForm({
         address: "",
         latitude: 0,
         longitude: 0,
+        map_link: "",
         min_price: null,
         max_price: null,
         average_rating: null,
@@ -203,6 +204,19 @@ export default function VenueForm({
                                     }}
                                     placeholder="Alamat lengkap venue"
                                     rows={3}
+                                />
+                            </FormGroup>
+                        </div>
+
+                        <div className="lg:col-span-2">
+                            <FormGroup label="Map Link" error={errors.map_link}>
+                                <Input
+                                    type="text"
+                                    value={data.map_link ?? ""}
+                                    onChange={(e) => {
+                                        setData("map_link", e.target.value);
+                                    }}
+                                    placeholder="Contoh: https://maps.google.com/..."
                                 />
                             </FormGroup>
                         </div>

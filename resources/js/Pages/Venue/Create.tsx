@@ -19,6 +19,7 @@ export default function Create() {
         address: "",
         latitude: 0,
         longitude: 0,
+        map_link: "",
         min_price: null,
         max_price: null,
         average_rating: null,
