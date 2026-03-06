@@ -14,8 +14,6 @@ import {
 } from "@/Components/ui/sidebar";
 import { Link, usePage } from "@inertiajs/react";
 import {
-    BanknoteIcon,
-    BookIcon,
     BookOpenCheckIcon,
     ChevronRight,
     DatabaseIcon,

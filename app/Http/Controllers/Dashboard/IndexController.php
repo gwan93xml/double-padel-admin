@@ -22,9 +22,7 @@ class IndexController extends Controller
         $totalAdmins = User::whereHas('roles', function ($query) {
             $query->where('name', 'admin');
         })->count();
-        $totalMembers = User::whereHas('roles', function ($query) {
-            $query->where('name', 'member');
-        })->count();
+        $totalMembers = User::member()->count();
         $totalBlogs = Blog::count();
 
         // Booking Statistics
@@ -57,6 +55,7 @@ class IndexController extends Controller
 
         // Monthly Booking Trend (last 6 months)
         $bookingTrend = Booking::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, SUM(total_price) as revenue')
+            ->where('status', Booking::STATUS_COMPLETED)
             ->where('created_at', '>=', now()->subMonths(6))
             ->groupBy('month')
             ->orderBy('month')
