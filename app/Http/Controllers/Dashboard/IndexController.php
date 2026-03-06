@@ -55,7 +55,7 @@ class IndexController extends Controller
 
         // Monthly Booking Trend (last 6 months)
         $bookingTrend = Booking::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count, SUM(total_price) as revenue')
-            ->where('status', Booking::STATUS_COMPLETED)
+            ->where('status', Booking::STATUS_CONFIRMED)
             ->where('created_at', '>=', now()->subMonths(6))
             ->groupBy('month')
             ->orderBy('month')
